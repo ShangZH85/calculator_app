@@ -11,7 +11,7 @@ class interfacePage extends StatelessWidget {
     "7", "8", "9", "*", //
     "4", "5", "6", "-", //
     "1", "2", "3", "+", //
-    " ", "0", ".", "=", //
+    "", "0", ".", "=", //
   ];
 
   static const TKeys = [
@@ -31,8 +31,10 @@ class interfacePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PAGE_COLOR,
       appBar: AppBar(
         title: Text("计算器"),
+        backgroundColor: PAGE_COLOR,
         centerTitle: true,
       ),
       body: Padding(
@@ -41,7 +43,22 @@ class interfacePage extends StatelessWidget {
           child: Center(
               child: Column(
             children: <Widget>[
-              Expanded(child: Center(child: Text("显区域"))),
+              Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Text(
+                        "显区域1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                        ),
+                      )),
+              ),
+                  )),
               Container(child: Center(child: _buildBtns()))
             ],
           )),
@@ -55,6 +72,7 @@ class interfacePage extends StatelessWidget {
       flex: flex,
       child: FlatButton(
         onPressed: () => 0,
+        padding: EdgeInsets.all(0.0),
         child: Container(
           decoration: BoxDecoration(
               color: TKeys.contains(num)
@@ -64,6 +82,7 @@ class interfacePage extends StatelessWidget {
               borderRadius:
                   flex > 1 ? BorderRadius.all(Radius.circular(1000.0)) : null),
           padding: EdgeInsets.all(20.0),
+          margin: EdgeInsets.all(10.0),
           child: Center(
               child: Text(
             "$num",
@@ -79,10 +98,18 @@ class interfacePage extends StatelessWidget {
 
     List<Widget> btns = [];
 
+    int flex = 1;
+
     for (int i = 0; i < NKeys.length; i++) {
       String key = NKeys[i];
-      Widget b = buildFlatButton(key);
-      btns.add(b);
+      if (key.isEmpty) {
+        flex++;
+        continue;
+      } else {
+        Widget b = buildFlatButton(key, flex: flex);
+        btns.add(b);
+        flex = 1;
+      }
       if ((i + 1) % 4 == 0) {
         rows.add(Row(
           children: btns,
