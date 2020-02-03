@@ -1,6 +1,7 @@
+import 'package:calculator_app/operation.dart';
 import 'package:flutter/material.dart';
 
-class interfacePage extends StatelessWidget {
+class interfacePage extends StatefulWidget {
   static const Color PAGE_COLOR = Colors.black;
   static const Color NUM_BTN_BG = Color(0xff323232);
   static const Color TOP_BTN_BG = Color(0xFFa6a6a6);
@@ -29,12 +30,41 @@ class interfacePage extends StatelessWidget {
   ];
 
   @override
+  _interfacePageState createState() => _interfacePageState();
+}
+
+class _interfacePageState extends State<interfacePage> {
+
+  String _num = "";
+
+  operation _op = new operation();
+
+  void clickKey(String key) {
+
+//    if("C".compareTo(key)==0){
+//      _num="";
+//      key="";
+//    }
+//
+//    setState(() {
+//      _num += key;
+//    });
+
+  _op.addKey(key);
+
+  setState(() {
+    _num=_op.OutPut;
+  });
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PAGE_COLOR,
+      backgroundColor: interfacePage.PAGE_COLOR,
       appBar: AppBar(
         title: Text("计算器"),
-        backgroundColor: PAGE_COLOR,
+        backgroundColor: interfacePage.PAGE_COLOR,
         centerTitle: true,
       ),
       body: Padding(
@@ -42,26 +72,28 @@ class interfacePage extends StatelessWidget {
         child: Container(
           child: Center(
               child: Column(
-            children: <Widget>[
-              Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Text(
-                        "显区域1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
+                children: <Widget>[
+                  Expanded(
+                      child: SingleChildScrollView(
+                        reverse: true,
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                "$_num",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                ),
+                              )),
                         ),
                       )),
-              ),
-                  )),
-              Container(child: Center(child: _buildBtns()))
-            ],
-          )),
+                  Container(child: Center(child: _buildBtns()))
+                ],
+              )),
         ),
       ),
     );
@@ -71,23 +103,27 @@ class interfacePage extends StatelessWidget {
     return Expanded(
       flex: flex,
       child: FlatButton(
-        onPressed: () => 0,
+        onPressed: () {
+          clickKey(num);
+        },
         padding: EdgeInsets.all(0.0),
         child: Container(
           decoration: BoxDecoration(
-              color: TKeys.contains(num)
-                  ? TOP_BTN_BG
-                  : RKeys.contains(num) ? RI_BTN_BG : NUM_BTN_BG,
+              color: interfacePage.TKeys.contains(num)
+                  ? interfacePage.TOP_BTN_BG
+                  : interfacePage.RKeys.contains(num)
+                  ? interfacePage.RI_BTN_BG
+                  : interfacePage.NUM_BTN_BG,
               shape: flex > 1 ? BoxShape.rectangle : BoxShape.circle,
               borderRadius:
-                  flex > 1 ? BorderRadius.all(Radius.circular(1000.0)) : null),
+              flex > 1 ? BorderRadius.all(Radius.circular(1000.0)) : null),
           padding: EdgeInsets.all(20.0),
           margin: EdgeInsets.all(10.0),
           child: Center(
               child: Text(
-            "$num",
-            style: TextStyle(fontSize: 28.0),
-          )),
+                "$num",
+                style: TextStyle(fontSize: 28.0),
+              )),
         ),
       ),
     );
@@ -100,8 +136,8 @@ class interfacePage extends StatelessWidget {
 
     int flex = 1;
 
-    for (int i = 0; i < NKeys.length; i++) {
-      String key = NKeys[i];
+    for (int i = 0; i < interfacePage.NKeys.length; i++) {
+      String key = interfacePage.NKeys[i];
       if (key.isEmpty) {
         flex++;
         continue;
