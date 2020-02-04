@@ -35,25 +35,55 @@ class operation {
 
   static const EQ = "=";
 
+  List<String> _keys = [];
+
   List<String> _s1 = [], _s2 = [];
   List<double> _s3 = [];
 
   void addKey(String key) {
+    if (TKeys.contains(key)) {
+      switch (key) {
+        case "C":
+          _s1 = [];
+          _s2 = [];
+          _s3 = [];
+          _output = "";
+          _curnum = "";
+          return;
+          break;
+//        case "D":
+//          if (RKeys.contains(key)) {
+//            _output="";
+//            _keys.removeLast();
+//            for(int i=0;i<_keys.length;i++){
+//              _output+=_keys[i];
+//            }
+//          }
+//          return;
+//          break;
+      }
+    }
+
     if (NKeys.contains(key)) {
+      _keys.add(key);
       _curnum += key;
       _output += key;
     } else {
-      _s1.add(_curnum);
-      _curnum = "";
-      _output += key;
+      if (_curnum.isNotEmpty) {
+        _s1.add(_curnum);
+        _curnum = "";
+        _output += key;
+      }
     }
 
     if (RKeys.contains(key)) {
+      _keys.add(key);
       if (_s2.length == 0) {
         _s2.add(key);
       } else {
         if (RKeysMap[key] <= RKeysMap[_s2[_s2.length - 1]]) {
-          while (_s2.length > 0) {
+          while (_s2.length > 0 &&
+              RKeysMap[key] <= RKeysMap[_s2[_s2.length - 1]]) {
             _s1.add(_s2.removeLast());
           }
         }

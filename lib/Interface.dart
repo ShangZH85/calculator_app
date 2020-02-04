@@ -41,15 +41,6 @@ class _interfacePageState extends State<interfacePage> {
 
   void clickKey(String key) {
 
-//    if("C".compareTo(key)==0){
-//      _num="";
-//      key="";
-//    }
-//
-//    setState(() {
-//      _num += key;
-//    });
-
   _op.addKey(key);
 
   setState(() {
