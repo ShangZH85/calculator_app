@@ -41,30 +41,35 @@ class operation {
   List<double> _s3 = [];
 
   void addKey(String key) {
+    String prekey = "";
+
+    if (_keys.length > 0) {
+      prekey = _keys[_keys.length - 1];
+    }
+
     if (TKeys.contains(key)) {
       switch (key) {
         case "C":
           _s1 = [];
           _s2 = [];
           _s3 = [];
+          _keys = [];
           _output = "";
           _curnum = "";
           return;
           break;
-//        case "D":
-//          if (RKeys.contains(key)) {
-//            _output="";
-//            _keys.removeLast();
-//            for(int i=0;i<_keys.length;i++){
-//              _output+=_keys[i];
-//            }
-//          }
-//          return;
-//          break;
+        case "D":
+          removeLastkey();
+          return;
+          break;
       }
     }
 
     if (NKeys.contains(key)) {
+      if (_curnum.isEmpty && _s1.isEmpty) {
+        _output = "";
+      }
+
       _keys.add(key);
       _curnum += key;
       _output += key;
@@ -72,12 +77,25 @@ class operation {
       if (_curnum.isNotEmpty) {
         _s1.add(_curnum);
         _curnum = "";
-        _output += key;
       }
     }
 
     if (RKeys.contains(key)) {
+      if (_s1.isEmpty) {
+        String str = result.toString();
+        _output = str;
+        for (int i = 0; i < str.length; i++) {
+          _keys.add(str.substring(i, i + 1));
+        }
+        _s1.add(result.toString());
+      }
+      if (RKeys.contains(prekey)) {
+        removeLastkey();
+      }
+
+      _output += key;
       _keys.add(key);
+
       if (_s2.length == 0) {
         _s2.add(key);
       } else {
@@ -91,7 +109,11 @@ class operation {
       }
     }
 
-    if (key == EQ) {
+    if (key == EQ && (_s1.length > 0 || _curnum.isNotEmpty) && prekey != EQ) {
+      if (RKeys.contains(prekey)) {
+        removeLastkey();
+      }
+      _keys.add(key);
       while (_s2.length > 0) {
         _s1.add(_s2.removeLast());
       }
@@ -123,6 +145,44 @@ class operation {
       _s3 = [];
       _s2 = [];
       _s1 = [];
+      _keys = [];
+    }
+  }
+
+  void removeLastkey() {
+    String prekey = "";
+
+    if (_keys.length > 0) {
+      prekey = _keys[_keys.length - 1];
+    }
+
+    if (RKeys.contains(prekey)) {
+      String k1 = _s1[_s1.length - 1];
+      if (RKeys.contains(k1)) {
+        _s2.removeLast();
+        for (int i = _s1.length - 1; i >= 0; i--) {
+          String kk = _s1[i];
+          if (RKeys.contains(kk)) {
+            _s2.add(_s1.removeLast());
+          } else {
+            break;
+          }
+        }
+      } else {
+        _s2.removeLast();
+      }
+      _keys.removeLast();
+      _output = _output.substring(0, _output.length - 1);
+    } else if (_s1.length > 0 || _curnum.isNotEmpty) {
+      if (_curnum.isNotEmpty) {
+        _curnum = _curnum.substring(0, _curnum.length - 1);
+      } else {
+        String str = _s1.removeLast();
+        str = str.substring(0, str.length - 1);
+        _curnum=str;
+      }
+      _keys.removeLast();
+      _output = _output.substring(0, _output.length - 1);
     }
   }
 }
