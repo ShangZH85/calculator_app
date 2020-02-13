@@ -8,7 +8,7 @@ class interfacePage extends StatefulWidget {
   static const Color RI_BTN_BG = Color(0xffFF9500);
 
   static const NKeys = [
-    "C", "D", "%", "/", //
+    "C", "D", "T", "/", //
     "7", "8", "9", "*", //
     "4", "5", "6", "-", //
     "1", "2", "3", "+", //
@@ -18,7 +18,7 @@ class interfacePage extends StatefulWidget {
   static const TKeys = [
     "C",
     "D",
-    "%",
+    "T",
   ];
 
   static const RKeys = [
@@ -39,9 +39,9 @@ class _interfacePageState extends State<interfacePage> {
 
   operation _op = new operation();
 
-  void clickKey(String key) {
+  void clickKey(String key,BuildContext context) {
 
-  _op.addKey(key);
+  _op.addKey(key,context);
 
   setState(() {
     _num=_op.OutPut;
@@ -82,7 +82,7 @@ class _interfacePageState extends State<interfacePage> {
                               )),
                         ),
                       )),
-                  Container(child: Center(child: _buildBtns()))
+                  Container(child: Center(child: _buildBtns(context)))
                 ],
               )),
         ),
@@ -90,12 +90,12 @@ class _interfacePageState extends State<interfacePage> {
     );
   }
 
-  Widget buildFlatButton(String num, {int flex = 1}) {
+  Widget buildFlatButton(String num,BuildContext context, {int flex = 1}) {
     return Expanded(
       flex: flex,
       child: FlatButton(
         onPressed: () {
-          clickKey(num);
+          clickKey(num,context);
         },
         padding: EdgeInsets.all(0.0),
         child: Container(
@@ -120,7 +120,7 @@ class _interfacePageState extends State<interfacePage> {
     );
   }
 
-  Widget _buildBtns() {
+  Widget _buildBtns(BuildContext context) {
     List<Widget> rows = [];
 
     List<Widget> btns = [];
@@ -133,7 +133,7 @@ class _interfacePageState extends State<interfacePage> {
         flex++;
         continue;
       } else {
-        Widget b = buildFlatButton(key, flex: flex);
+        Widget b = buildFlatButton(key,context, flex: flex);
         btns.add(b);
         flex = 1;
       }

@@ -1,3 +1,7 @@
+import 'package:calculator_app/transformation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 class operation {
   String _output = "";
   String _curnum = "";
@@ -16,7 +20,7 @@ class operation {
   static const TKeys = [
     "C",
     "D",
-    "%",
+    "T",
   ];
 
   static const RKeys = [
@@ -40,7 +44,7 @@ class operation {
   List<String> _s1 = [], _s2 = [];
   List<double> _s3 = [];
 
-  void addKey(String key) {
+  void addKey(String key, BuildContext context) {
     String prekey = "";
 
     if (_keys.length > 0) {
@@ -60,6 +64,14 @@ class operation {
           break;
         case "D":
           removeLastkey();
+          return;
+          break;
+        case "T":
+          print(",,,,");
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext ctx) {
+            return new transPage();
+          }));
           return;
           break;
       }
@@ -179,7 +191,7 @@ class operation {
       } else {
         String str = _s1.removeLast();
         str = str.substring(0, str.length - 1);
-        _curnum=str;
+        _curnum = str;
       }
       _keys.removeLast();
       _output = _output.substring(0, _output.length - 1);
